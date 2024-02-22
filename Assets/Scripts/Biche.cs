@@ -15,6 +15,9 @@ public class Biche : MonoBehaviour
     private NavMeshAgent agent; 
     public float tempsEntreDestinations = 5f; 
     private float tempsEcoule = 0f;
+    private double seuilSoif = 50;
+    private float minRandomValue=0.2f;
+    private float maxRandomValue=2.0f;
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -40,13 +43,14 @@ public class Biche : MonoBehaviour
     //On baisse le niveau de faim et de soif en fonction du temps 
     void DecreaseverTime()
     {
+        float randomFactor = Random.Range(minRandomValue, maxRandomValue);
+                
         hunger -= Time.deltaTime * 0.5; 
-        thirsty -= Time.deltaTime * 1.0;
+        thirsty -= Time.deltaTime * randomFactor;
         //On vérifie si la faim et la soif reste dans la bonne intervalle
         hunger = Mathf.Clamp((float)hunger, 0f, 100f);
         thirsty = Mathf.Clamp((float)thirsty, 0f, 100f);
-        Debug.Log("hunger"+ hunger);
-        Debug.Log("thirsty"+thirsty);
+        
     }
     
     //On gère dans cette fonction toutes les conditions de mort
@@ -73,10 +77,48 @@ public class Biche : MonoBehaviour
     
     void ChoisirNouvelleDestination()
     {
-        
-        NavMesh.SamplePosition(transform.position + Random.insideUnitSphere * 10f, out NavMeshHit hit, 10f, NavMesh.AllAreas);
+        if (thirsty < seuilSoif)
+        {
+            GameObject[] pointsEau = GameObject.FindGameObjectsWithTag("Eau");
+            GameObject destinationEau = TrouverEauLaPlusProche(pointsEau);
 
-       
+            if (destinationEau != null)
+            {   
+                Debug.Log("Biche a soif !");
+                agent.SetDestination(destinationEau.transform.position);
+                return;
+            }
+        }
+
+        NavMesh.SamplePosition(transform.position + Random.insideUnitSphere * 10f, out NavMeshHit hit, 10f, NavMesh.AllAreas);
         agent.SetDestination(hit.position);
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Eau"))
+        {
+            Debug.Log("Biche a bu !");
+            thirsty = 100;
+            ChoisirNouvelleDestination(); 
+        }
+    }
+    GameObject TrouverEauLaPlusProche(GameObject[] pointsEau)
+    {
+        GameObject destinationEau = null;
+        float distanceMinimale = float.MaxValue;
+
+        foreach (GameObject pointEau in pointsEau)
+        {
+            float distance = Vector3.Distance(transform.position, pointEau.transform.position);
+
+            if (distance < distanceMinimale)
+            {
+                destinationEau = pointEau;
+                distanceMinimale = distance;
+            }
+        }
+
+        return destinationEau;
     }
 }
