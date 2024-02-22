@@ -787,6 +787,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Biche
       objectReference: {fileID: 0}
+    - target: {fileID: 7636950913634693363, guid: 21905c0ea3447ea429d41f6aa2e5a109, type: 3}
+      propertyPath: m_TagString
+      value: Biche
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

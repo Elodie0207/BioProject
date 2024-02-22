@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Eau
   - Grass
+  - Biche
   layers:
   - Default
   - TransparentFX

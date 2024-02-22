@@ -46,7 +46,7 @@ public class Biche : MonoBehaviour
     {
         float randomFactor = Random.Range(minRandomValue, maxRandomValue);
                 
-        hunger -= Time.deltaTime * 5.0; 
+        hunger -= Time.deltaTime * 0.5; 
         thirsty -= Time.deltaTime * randomFactor;
         //On vérifie si la faim et la soif reste dans la bonne intervalle
         hunger = Mathf.Clamp((float)hunger, 0f, 100f);
