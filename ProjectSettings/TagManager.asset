@@ -4,8 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Walkable
   - Eau
+  - Grass
   layers:
   - Default
   - TransparentFX
