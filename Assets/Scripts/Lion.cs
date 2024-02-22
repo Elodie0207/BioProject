@@ -2,7 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.AI;
+using Random = UnityEngine.Random;
 public class Lion : MonoBehaviour
 {
         private double health = 100;
@@ -10,9 +11,28 @@ public class Lion : MonoBehaviour
         private double thirsty = 100;
         private string genre = "";
         private bool dead = false; 
+        private NavMeshAgent agent; 
+        public float tempsEntreDestinations = 5f; 
+        private float tempsEcoule = 0f;
         
+        void Start()
+        {
+                agent = GetComponent<NavMeshAgent>();
+        }
+        void Update()
+        {
         
-        
+                DecreaseverTime();
+                tempsEcoule += Time.deltaTime;
+
+                if (tempsEcoule >= tempsEntreDestinations)
+                {
+                        ChoisirNouvelleDestination();
+                        tempsEcoule = 0f;
+                }
+                Debug.Log("hungerLion"+ hunger);
+                Debug.Log("thirstyLion"+thirsty);
+        }
         //On baisse le niveau de faim et de soif en fonction du temps 
         void DecreaseverTime()
         {
@@ -44,5 +64,13 @@ public class Lion : MonoBehaviour
         void mutation()
         {
         
+        }
+        void ChoisirNouvelleDestination()
+        {
+              
+                NavMesh.SamplePosition(transform.position + Random.insideUnitSphere * 10f, out NavMeshHit hit, 10f, NavMesh.AllAreas);
+
+          
+                agent.SetDestination(hit.position);
         }
 }
