@@ -19,6 +19,7 @@ public class Biche : MonoBehaviour
     private double seuilFaim = 50;
     private float minRandomValue=0.2f;
     private float maxRandomValue=2.0f;
+    private double age=0;
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -30,6 +31,7 @@ public class Biche : MonoBehaviour
     {
         
         DecreaseverTime();
+        IncreaseAge();
         tempsEcoule += Time.deltaTime;
 
         if (tempsEcoule >= tempsEntreDestinations)
@@ -48,12 +50,23 @@ public class Biche : MonoBehaviour
                 
         hunger -= Time.deltaTime * 0.5; 
         thirsty -= Time.deltaTime * randomFactor;
+        
         //On vérifie si la faim et la soif reste dans la bonne intervalle
         hunger = Mathf.Clamp((float)hunger, 0f, 100f);
         thirsty = Mathf.Clamp((float)thirsty, 0f, 100f);
         
     }
-    
+    void IncreaseAge()
+    {
+        float randomFactor = Random.Range(minRandomValue, maxRandomValue);
+
+        age += Time.deltaTime * randomFactor;
+        
+        //On vérifie si la faim et la soif reste dans la bonne intervalle
+        age = Mathf.Clamp((float)hunger, 0f, 100f);
+       
+        
+    }
     //On gère dans cette fonction toutes les conditions de mort
     void Dead()
     {
@@ -62,6 +75,8 @@ public class Biche : MonoBehaviour
             dead = true;
 
         if (thirsty == 0)
+            dead = true;
+        if (age >= 90)
             dead = true;
     }
     

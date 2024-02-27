@@ -11,6 +11,7 @@ public class Lion : MonoBehaviour
         private double thirsty = 100;
         private string genre = "";
         private bool dead = false; 
+        private bool faim = false; 
         private NavMeshAgent agent; 
         public float tempsEntreDestinations = 5f; 
         private float tempsEcoule = 0f;
@@ -18,7 +19,7 @@ public class Lion : MonoBehaviour
         private float maxRandomValue=2.0f;
         private double seuilSoif = 50;
         private double seuilFaim = 50;
-
+        private double age=0;
 
         void Start()
         {
@@ -28,6 +29,7 @@ public class Lion : MonoBehaviour
         {
         
                 DecreaseverTime();
+                IncreaseAge();
                 tempsEcoule += Time.deltaTime;
 
                 if (tempsEcoule >= tempsEntreDestinations)
@@ -35,7 +37,22 @@ public class Lion : MonoBehaviour
                         ChoisirNouvelleDestination();
                         tempsEcoule = 0f;
                 }
-               
+
+                if (dead)
+                {
+                        agent.gameObject.SetActive(false); 
+                }
+        }
+        void IncreaseAge()
+        {
+                float randomFactor = Random.Range(minRandomValue, maxRandomValue);
+
+                age += Time.deltaTime * randomFactor;
+        
+                //On vérifie si la faim et la soif reste dans la bonne intervalle
+                age = Mathf.Clamp((float)hunger, 0f, 100f);
+       
+        
         }
         //On baisse le niveau de faim et de soif en fonction du temps 
         void DecreaseverTime()
@@ -60,6 +77,9 @@ public class Lion : MonoBehaviour
 
                 if (thirsty == 0)
                         dead = true;
+                
+                if (age >= 90)
+                        dead = true;
         }
         void ChoisirNouvelleDestination()
         {
@@ -83,7 +103,7 @@ public class Lion : MonoBehaviour
                         if (destinationBiche != null)
                         {   
                                 Debug.Log("Lion a faim !");
-                                
+                                faim = true; 
                                 agent.SetDestination(destinationBiche.transform.position);
                                 return;
                         }
@@ -113,13 +133,14 @@ public class Lion : MonoBehaviour
                         ChoisirNouvelleDestination(); 
                 }
                 
-                if (other.CompareTag("Biche"))
+                if (other.CompareTag("Biche")&& faim)
                 {
                         Debug.Log("Lion a mangé !");
                         hunger = 100;
                         other.gameObject.SetActive(false); 
                         //GameObject.FindGameObjectWithTag("mutation").GetComponent<mutation>().NumBiches -= 1;
-                        ChoisirNouvelleDestination(); 
+                        ChoisirNouvelleDestination();
+                        faim = false; 
                 }
         }
         GameObject TrouverEauLaPlusProche(GameObject[] pointsEau)
