@@ -6,7 +6,7 @@ using UnityEngine.AI;
 using Random = UnityEngine.Random;
 public class Lion : MonoBehaviour
 {
-        private double health = 100;
+        public float health = 100;
         private double hunger = 100;
         private double thirsty = 100;
         private string genre = "";
@@ -18,6 +18,8 @@ public class Lion : MonoBehaviour
         private float maxRandomValue=2.0f;
         private double seuilSoif = 50;
         private double seuilFaim = 50;
+
+
         void Start()
         {
                 agent = GetComponent<NavMeshAgent>();
@@ -59,17 +61,6 @@ public class Lion : MonoBehaviour
                 if (thirsty == 0)
                         dead = true;
         }
-        
-        
-        void parentSelection()
-        {
-        
-        }
-
-        void mutation()
-        {
-        
-        }
         void ChoisirNouvelleDestination()
         {
                 if (thirsty < seuilSoif)
@@ -97,8 +88,20 @@ public class Lion : MonoBehaviour
                                 return;
                         }
                 }
-                NavMesh.SamplePosition(transform.position + Random.insideUnitSphere * 10f, out NavMeshHit hit, 10f, NavMesh.AllAreas);
-                agent.SetDestination(hit.position);
+                
+                Vector3 sampledPosition;
+                if (NavMesh.SamplePosition(transform.position + Random.insideUnitSphere * 10f, out NavMeshHit hit, 10f, NavMesh.AllAreas))
+                {
+                        sampledPosition = hit.position;
+                }
+                else
+                {
+                        Debug.LogWarning("Failed to sample a valid position on the NavMesh. Falling back to default position.");
+                        sampledPosition = transform.position; // Fallback to the object's current position
+                }
+
+                agent.SetDestination(sampledPosition);
+
         }
 
         void OnTriggerEnter(Collider other)
@@ -115,6 +118,7 @@ public class Lion : MonoBehaviour
                         Debug.Log("Lion a mangé !");
                         hunger = 100;
                         other.gameObject.SetActive(false); 
+                        //GameObject.FindGameObjectWithTag("mutation").GetComponent<mutation>().NumBiches -= 1;
                         ChoisirNouvelleDestination(); 
                 }
         }

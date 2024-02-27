@@ -7,11 +7,11 @@ using Random = UnityEngine.Random;
 
 public class Biche : MonoBehaviour
 {
-    private double health = 100;
+    public float health = 100;
     private double hunger = 100;
     private double thirsty = 100;
     private string genre = "";
-    private bool dead = false;
+    public bool dead = false;
     private NavMeshAgent agent; 
     public float tempsEntreDestinations = 5f; 
     private float tempsEcoule = 0f;
@@ -64,17 +64,6 @@ public class Biche : MonoBehaviour
         if (thirsty == 0)
             dead = true;
     }
-
-
-    void parentSelection()
-    {
-        
-    }
-
-    void mutation()
-    {
-        
-    }
     
     void ChoisirNouvelleDestination()
     {
@@ -102,8 +91,20 @@ public class Biche : MonoBehaviour
                 return;
             }
         }
-        NavMesh.SamplePosition(transform.position + Random.insideUnitSphere * 10f, out NavMeshHit hit, 10f, NavMesh.AllAreas);
-        agent.SetDestination(hit.position);
+        
+        Vector3 sampledPosition;
+        if (NavMesh.SamplePosition(transform.position + Random.insideUnitSphere * 10f, out NavMeshHit hit, 10f, NavMesh.AllAreas))
+        {
+                sampledPosition = hit.position;
+        }
+        else
+        {
+                Debug.LogWarning("Failed to sample a valid position on the NavMesh. Falling back to default position.");
+                sampledPosition = transform.position; // Fallback to the object's current position
+        }
+
+        agent.SetDestination(sampledPosition);
+
     }
 
     void OnTriggerEnter(Collider other)
