@@ -5,13 +5,11 @@ using UnityEngine;
 
 public class LSystem : MonoBehaviour
 {
-    
-
    private Dictionary<char, string> rules = new Dictionary<char, string>
     {
-        //{ 'F', "FF+[+F-F-F]-[-F+F+F]" },
-        //{ 'X', "F-[[X]+X]+F[+FX]-X" },
-        { 'G', "GG" }
+        { 'F', "FF+[+F-F-F]-[-F+F+F]" },
+        { 'X', "F-[[X]+X]+F[+FX]-X" },
+        //{ 'G', "GG" }
         
     };
 
@@ -60,7 +58,7 @@ public class LSystem : MonoBehaviour
             {
                 case 'F':
                     CreateCylinder(currentPosition, currentRotation, radius, height);
-                    currentPosition += currentRotation * Vector3.up * height;
+                    currentPosition += currentRotation * Vector3.forward * height; // Ajuste en el eje z
                     break;
                 case 'X':
                  
@@ -96,6 +94,7 @@ public class LSystem : MonoBehaviour
             }
         }
     }
+
     private void CreateX(Vector3 position, Quaternion rotation, float radius, float height)
     {
      
@@ -109,7 +108,7 @@ public class LSystem : MonoBehaviour
     private void CreateCylinder(Vector3 position, Quaternion rotation, float radius, float height)
     {
         GameObject cylinder = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-        Destroy(cylinder.GetComponent<Collider>()); 
+        Destroy(cylinder.GetComponent<Collider>());
         cylinder.transform.position = position;
         cylinder.transform.rotation = rotation;
         cylinder.transform.localScale = new Vector3(radius * 2, height, radius * 2);
