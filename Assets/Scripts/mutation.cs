@@ -85,10 +85,8 @@ public class mutation : MonoBehaviour
     {
         while(NumGenerations<NumberOfGenerations)
         {
-            //ClearOldGeneration();
             NumGenerations++;
             NumGenerationTxt.text = "Génération n° "+NumGenerations;
-            //InitialisationPopulation();
             
             // Lions
             parentsLion = SelectionnerParentsLion();
@@ -113,13 +111,13 @@ public class mutation : MonoBehaviour
             Mutation(childrenBiche[0]);
 
             GameObject bicheChild1 = Instantiate(bichePrefab, ConvertToFloat(childrenBiche[0]), Quaternion.identity);
-            Biche bicheChild1Component = bicheChild1.AddComponent<Biche>();
+            Biche bicheChild1Component = bicheChild1.GetComponent<Biche>();
             biches.Add(bicheChild1Component);
 
             Mutation(childrenBiche[1]);
 
             GameObject bicheChild2 = Instantiate(bichePrefab, ConvertToFloat(childrenBiche[1]), Quaternion.identity);
-            Biche bicheChild2Component = bicheChild2.AddComponent<Biche>();
+            Biche bicheChild2Component = bicheChild2.GetComponent<Biche>();
             biches.Add(bicheChild2Component);
 
             supppLesDeuxPlusNulsBiches(); 
@@ -162,6 +160,10 @@ public class mutation : MonoBehaviour
         for (int i=0; i< NumLions; i++ )
         {
             GameObject lion = Instantiate(lionPrefab, new Vector3(Random.Range(-19f,19f), 2f, Random.Range(-20f, 20f)), Quaternion.identity);
+            Debug.Log($"Instantiated Rotation: {lion.transform.rotation.eulerAngles}");
+
+
+
             Lion lionComponent = lion.GetComponent<Lion>();
             lions.Add(lionComponent);
         }

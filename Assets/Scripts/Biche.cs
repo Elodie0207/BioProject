@@ -117,6 +117,9 @@ public class Biche : MonoBehaviour
                 Debug.LogWarning("Failed to sample a valid position on the NavMesh. Falling back to default position.");
                 sampledPosition = transform.position; // Fallback to the object's current position
         }
+        if (!agent.enabled) {
+                agent.enabled = true;
+                }
 
         agent.SetDestination(sampledPosition);
 

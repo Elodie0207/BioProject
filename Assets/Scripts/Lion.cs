@@ -24,6 +24,7 @@ public class Lion : MonoBehaviour
         void Start()
         {
                 agent = GetComponent<NavMeshAgent>();
+                agent.updateRotation = false; 
         }
         void Update()
         {
@@ -118,6 +119,9 @@ public class Lion : MonoBehaviour
                 {
                         Debug.LogWarning("Failed to sample a valid position on the NavMesh. Falling back to default position.");
                         sampledPosition = transform.position; // Fallback to the object's current position
+                }
+                if (!agent.enabled) {
+                agent.enabled = true;
                 }
 
                 agent.SetDestination(sampledPosition);
