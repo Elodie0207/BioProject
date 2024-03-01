@@ -103,7 +103,7 @@ public class mutation : MonoBehaviour
             Lion lionChild2Component = lionChild2.GetComponent<Lion>();
             lions.Add(lionChild2Component);
 
-            supppLesDeuxPlusNulsLions();
+           
 
             // Biches
             parentsBiche = SelectionnerParentsBiche();
@@ -120,8 +120,8 @@ public class mutation : MonoBehaviour
             Biche bicheChild2Component = bicheChild2.GetComponent<Biche>();
             biches.Add(bicheChild2Component);
 
-            supppLesDeuxPlusNulsBiches(); 
-            yield return new WaitForSeconds(1f);
+           
+            yield return new WaitForSeconds(100f);
             
         }
     }
@@ -169,9 +169,16 @@ public class mutation : MonoBehaviour
         }
 
         //Initialiser les biches
-        for (int i=0; i< NumBiches; i++ )
+        for (int i = 0; i < NumBiches; i++)
         {
-            GameObject biche = Instantiate(bichePrefab, new Vector3(Random.Range(-19f,19f), 2f, Random.Range(-20f, 20f)), Quaternion.identity);
+            // Instancier la biche avec la rotation du prefab
+            GameObject biche = Instantiate(bichePrefab, new Vector3(Random.Range(-19f, 19f), 2f, Random.Range(-20f, 20f)), bichePrefab.transform.rotation);
+
+            // Debug.Log pour afficher les rotations
+            Debug.Log("Prefab Rotation: " + bichePrefab.transform.rotation.eulerAngles);
+            Debug.Log("Instance Rotation: " + biche.transform.rotation.eulerAngles);
+
+            // Récupérer le composant Biche si nécessaire
             Biche bicheComponent = biche.GetComponent<Biche>();
             biches.Add(bicheComponent);
         }
@@ -261,7 +268,7 @@ public class mutation : MonoBehaviour
     }
 
     //selection de la plus nul lion
-   int SelectionnerLePlusNulLion()
+   /*int SelectionnerLePlusNulLion()
     {
         Lion le_plus_bas = lions[0];
         int id = 0;
@@ -319,5 +326,5 @@ public class mutation : MonoBehaviour
         Destroy(biches[nul2].gameObject);
         biches.RemoveAt(nul2);
     } 
-
+*/
 }

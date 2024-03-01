@@ -33,7 +33,7 @@ public class Biche : MonoBehaviour
         DecreaseverTime();
         IncreaseAge();
         tempsEcoule += Time.deltaTime;
-
+        
         if (tempsEcoule >= tempsEntreDestinations)
         {
             ChoisirNouvelleDestination();
